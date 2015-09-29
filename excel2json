@@ -1,0 +1,53 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "Sheet1"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+Option Explicit
+
+Sub export_range_to_json()
+
+    Dim fs As Object
+    Dim jsonfile
+    Dim rangetoexport As Range
+    Dim rowcounter As Long
+    Dim columncounter As Long
+    Dim linedata As String
+    
+    
+    Set rangetoexport = Sheet1.Range("b4:f16")
+    
+    Set fs = CreateObject("Scripting.FileSystemObject")
+    
+    
+    Set jsonfile = fs.CreateTextFile("c:\temp" & "jsondata.txt", True)
+    
+    linedata = "["
+    jsonfile.WriteLine linedata
+    For rowcounter = 2 To rangetoexport.Rows.Count
+        linedata = ""
+        For columncounter = 1 To rangetoexport.Columns.Count
+            linedata = linedata & """" & rangetoexport.Cells(1, columncounter) & """" & ":" & """" & rangetoexport.Cells(rowcounter, columncounter) & """" & ","
+        Next
+        linedata = Left(linedata, Len(linedata) - 1)
+        If rowcounter = rangetoexport.Rows.Count Then
+            linedata = "{" & linedata & "}"
+        Else
+            linedata = "{" & linedata & "},"
+        End If
+        
+        jsonfile.WriteLine linedata
+    Next
+    linedata = "]"
+    jsonfile.WriteLine linedata
+    jsonfile.Close
+    
+    Set fs = Nothing
+    
+    
+End Sub
+
