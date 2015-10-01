@@ -18,12 +18,12 @@ Sub export_range_to_json()
     Dim columncounter As Long
     Dim linedata As String
     
-    
+    'set cell range to export
     Set rangetoexport = Sheet1.Range("b4:f16")
     
     Set fs = CreateObject("Scripting.FileSystemObject")
     
-    
+    'set path to save txt file and file name. Note the extn can be changed
     Set jsonfile = fs.CreateTextFile("c:\temp" & "jsondata.txt", True)
     
     linedata = "["
